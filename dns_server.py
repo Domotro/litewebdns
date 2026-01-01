@@ -1,11 +1,10 @@
-import os
+# dns_server.py
+import os, json
 from flask import Flask, request, jsonify
-import json
 
 app = Flask(__name__)
 DNS_FILE = "dns_data.json"
 
-# Charger ou créer DNS
 try:
     with open(DNS_FILE,"r") as f:
         DNS = json.load(f)
@@ -22,11 +21,11 @@ def publish():
     domain = data.get("domain")
     html = data.get("html")
     title = data.get("title", domain)
-    description = data.get("description", "")
+    description = data.get("description","")
     if not domain or not html:
-        return jsonify({"error":"Domaine ou HTML manquant"}), 400
+        return jsonify({"error":"Domaine ou HTML manquant"}),400
     if domain in DNS:
-        return jsonify({"error":"Domaine déjà pris"}), 400
+        return jsonify({"error":"Domaine déjà pris"}),400
     DNS[domain] = {"html":html,"title":title,"description":description}
     with open(DNS_FILE,"w") as f:
         json.dump(DNS,f)
@@ -42,5 +41,5 @@ def search():
     return jsonify(results)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT",5000))
     app.run(host="0.0.0.0", port=port)
