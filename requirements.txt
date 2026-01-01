@@ -1,2 +1,3 @@
 Flask
-jsonify
+requests
+gunicorn
