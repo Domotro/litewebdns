@@ -1,11 +1,11 @@
-# dns_server.py
+import os
 from flask import Flask, request, jsonify
 import json
 
 app = Flask(__name__)
 DNS_FILE = "dns_data.json"
 
-# Charger le DNS existant
+# Charger ou créer DNS
 try:
     with open(DNS_FILE,"r") as f:
         DNS = json.load(f)
@@ -42,4 +42,5 @@ def search():
     return jsonify(results)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Render fournit PORT
+    app.run(host="0.0.0.0", port=port)
